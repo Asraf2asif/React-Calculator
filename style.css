@@ -1,0 +1,98 @@
+@import 'https://fonts.googleapis.com/css?family=Share+Tech+Mono';
+@font-face {
+  font-family: "Digital";
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff") format("woff"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.svg#Digital-7") format("svg");
+}
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+.calculator {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+}
+
+.calculator-screen {
+  width: 100%;
+  height: 80px;
+  background-color: #252525;
+  text-align: right;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.formulaScreen {
+  min-height: 20px;
+  font-family: digital;
+  font-size: 20px;
+  color: orange;
+  line-height: 20px;
+  vertical-align: text-top;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  padding-bottom: 5px;
+}
+
+.outputScreen {
+  font-family: digital;
+  font-size: 40px;
+  color: white;
+  line-height: 35px;
+}
+
+button {
+  height: 60px;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid #c4c4c4;
+  background-color: transparent;
+  font-size: 2rem;
+  color: #333;
+  background-image: linear-gradient(to bottom, transparent, transparent 50%, rgba(0, 0, 0, 0.04));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 0 rgba(255, 255, 255, 0.15), 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  text-shadow: 0 1px rgba(255, 255, 255, 0.4);
+}
+
+button:hover {
+  background-color: #eaeaea;
+}
+
+.operator {
+  background-color: #2e86c0;
+  border-color: #337cac;
+  color: #fff;
+}
+
+.operator:hover {
+  background-color: #4e9ed4;
+}
+
+.all-clear {
+  background-color: #f0595f;
+  border-color: #b0353a;
+  grid-column: 1/span 2;
+}
+
+.all-clear:hover {
+  background-color: #f17377;
+}
+
+.calculator-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+}
