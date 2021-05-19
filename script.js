@@ -140,9 +140,9 @@ class Calculator extends React.Component {
   }
 
   handleDelete(){
-   if(!this.state.evaluated){
+   if(this.state.currentVal.length >= 1 && !this.state.evaluated){
      this.setState(prevState => ({
-       currentVal: prevState.currentVal.length === 1 ? 0 : prevState.currentVal.slice(0, -1),
+       currentVal: prevState.currentVal.length === 1 ? "0" : prevState.currentVal.slice(0, -1),
        formula: prevState.formula.slice(0, -1)
      }))
    }
