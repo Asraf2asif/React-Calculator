@@ -13,7 +13,8 @@ class Calculator extends React.Component{
     this.handleOperators = this.handleOperators.bind(this);
     this.handleEvaluate = this.handleEvaluate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.initialize = this.initialize.bind(this);    
+    this.initialize = this.initialize.bind(this);  
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
   
   maxDigitWarning(){
@@ -45,32 +46,21 @@ class Calculator extends React.Component{
       }
       // function to setCurrentVal
       const setCurrentVal = (prevState,input)=> {
-        const {currentVal, formula} = prevState;
-        if(formula.length <= maxNum * 2){
-          // not include 0 or operator with inputed value
-          const isPrevValOperator = /[x÷+\-%]/.test(currentVal);
-          const isPrevValZero = currentVal == "0";
-          if(isPrevValOperator || isPrevValZero){
-            return input;
-          }
-          // otherwise include currentVal with inputed value
-          return currentVal + input;
+        const {currentVal, formula} = prevState;        
+        // not include 0 or operator with inputed value
+        const isPrevValOperator = /[x÷+\-%]/.test(currentVal);
+        const isPrevValZero = currentVal == "0";
+        if(isPrevValOperator || isPrevValZero){
+          return input;
         }
-        return currentVal; // not include input because formula space limit crossed
-      };
-      // function to setFormula
-      const setFormula = (prevState, input) => {
-        const {formula, prevVal} = prevState;
-        if(formula.length <= maxNum * 2){
-          return formula + input;
-        }
-        return formula; // not include input because formula space limit crossed
-      }
+        // otherwise include currentVal with inputed value
+        return currentVal + input;      
+      };     
       // change state
       if(currentVal.length <= maxNum){
         this.setState(prevState => ({
           currentVal:  setCurrentVal(prevState,input),
-          formula: setFormula(prevState, input) 
+          formula: prevState.formula + input
         }))
       }else{
         this.maxDigitWarning()
@@ -130,22 +120,16 @@ class Calculator extends React.Component{
       
       expresion = expresion.replace(/x/gi,"*")
                            .replace(/÷/gi,"/")
-
+                           
       const answer = eval(expresion)
-      // function to setFormula
-      const setFormula = (prevState, answer) => {
-        const {formula} = prevState;
-        const expresion = formula + "=" + answer;
-        if(expresion.length <= maxNum * 2){
-          return expresion;
-        }
-        return formula; // not include answer beacause space short
-      }
-      
+           
       if(answer.toString().length <= maxNum){
         this.setState(prevState => ({
             currentVal: answer.toString(),
-            formula: setFormula(prevState, answer),
+            formula: prevState.formula.replace(/x/gi," x ")
+                                 .replace(/÷/gi," ÷ ")
+                                 .replace(/\+/gi," + ")
+                                 .replace(/\-/gi," - ") + " = " + answer,
             prevVal: answer,
             evaluated: true
          }))
@@ -158,7 +142,7 @@ class Calculator extends React.Component{
   handleDelete(){
    if(this.state.currentVal.length >= 1 && !this.state.evaluated){
      this.setState(prevState => ({
-       currentVal: prevState.currentVal.slice(0, -1),
+       currentVal: prevState.currentVal.length === 1 ? "0" : prevState.currentVal.slice(0, -1),
        formula: prevState.formula.slice(0, -1)
      }))
    }
@@ -171,6 +155,45 @@ class Calculator extends React.Component{
       formula: "",
       evaluated: false
     });
+  }
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+  handleKeyPress(event) {
+    const keyIdMap = {
+      48:"zero", 96:"zero",
+      49:"one", 97:"one", 
+      50:"two", 98:"two", 
+      51:"three", 99:"three",
+      52:"four", 100:"four",
+      53:"five", 101:"five",
+      54:"six", 102:"six",
+      55:"seven", 103:"seven",
+      56:"eight", 104:"eight",
+      57:"nine", 105:"nine", 
+      190:"decimal", 110:"decimal",
+      111:"divide", 191:"divide",
+      187:"equals", 13:"equals",
+      8:"delete",
+      107:"add", 
+      109:"subtract",
+      106:"multiply" 
+    };
+    
+    const keyIdMapShift = {
+      187:"add", 
+      189:"subtract", 
+      56:"multiply" 
+    };
+    
+    const key = event.keyCode;
+    const id = event.shiftKey ? keyIdMapShift[key] : keyIdMap[key];     
+    if (typeof id === "string") {
+      document.getElementById(id).click()
+    }
   }
   
   render(){
@@ -224,11 +247,11 @@ class Buttons extends React.Component{
               {id: "multiply", value:"x", onClick: operatorHandler, className: "operator", order: 6},
               {id: "divide", value:"÷", onClick: operatorHandler,  className: "operator", order: 2},
               
-              {id: "module", value:"⌫", onClick: deleteOneByOne, className: "operator", order: 1},
+              {id: "delete", value:"⌫", onClick: deleteOneByOne, className: "operator", order: 1},
 
               {id: "equals", value:"=", onClick: evaluator, className: "operator", order: 17},
 
-              {id: "clear", value:"AC", onClick: initializer, className: "operator all-clear", order: 0},
+              {id: "clear", value:"AC", onClick: initializer, className: "operator all-clear", order: 0}
              ].sort((a,b) => a.order - b.order)
       }
   
