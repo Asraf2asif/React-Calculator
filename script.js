@@ -46,31 +46,20 @@ class Calculator extends React.Component {
       // function to setCurrentVal
       const setCurrentVal = (prevState, input) => {
         const { currentVal, formula } = prevState;
-        if (formula.length <= maxNum * 2) {
-          // not include 0 or operator with inputed value
-          const isPrevValOperator = /[x÷+\-%]/.test(currentVal);
-          const isPrevValZero = currentVal == "0";
-          if (isPrevValOperator || isPrevValZero) {
-            return input;
-          }
-          // otherwise include currentVal with inputed value
-          return currentVal + input;
+        // not include 0 or operator with inputed value
+        const isPrevValOperator = /[x÷+\-%]/.test(currentVal);
+        const isPrevValZero = currentVal == "0";
+        if (isPrevValOperator || isPrevValZero) {
+          return input;
         }
-        return currentVal; // not include input because formula space limit crossed
-      };
-      // function to setFormula
-      const setFormula = (prevState, input) => {
-        const { formula, prevVal } = prevState;
-        if (formula.length <= maxNum * 2) {
-          return formula + input;
-        }
-        return formula; // not include input because formula space limit crossed
+        // otherwise include currentVal with inputed value
+        return currentVal + input;
       };
       // change state
       if (currentVal.length <= maxNum) {
         this.setState(prevState => ({
           currentVal: setCurrentVal(prevState, input),
-          formula: setFormula(prevState, input) }));
+          formula: prevState.formula + input }));
 
       } else {
         this.maxDigitWarning();
@@ -132,20 +121,14 @@ class Calculator extends React.Component {
       replace(/÷/gi, "/");
 
       const answer = eval(expresion);
-      // function to setFormula
-      const setFormula = (prevState, answer) => {
-        const { formula } = prevState;
-        const expresion = formula + "=" + answer;
-        if (expresion.length <= maxNum * 2) {
-          return expresion;
-        }
-        return formula; // not include answer beacause space short
-      };
 
       if (answer.toString().length <= maxNum) {
         this.setState(prevState => ({
           currentVal: answer.toString(),
-          formula: setFormula(prevState, answer),
+          formula: prevState.formula.replace(/x/gi, " x ").
+          replace(/÷/gi, " ÷ ").
+          replace(/\+/gi, " + ").
+          replace(/\-/gi, " - ") + " = " + answer,
           prevVal: answer,
           evaluated: true }));
 
