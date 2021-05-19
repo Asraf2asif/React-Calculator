@@ -1,4 +1,5 @@
-function _extends() {_extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};return _extends.apply(this, arguments);}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}const maxNum = 19;
+function _extends() {_extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};return _extends.apply(this, arguments);}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+const maxNum = 19;
 class Calculator extends React.Component {
 
   constructor(props) {
@@ -138,13 +139,13 @@ class Calculator extends React.Component {
     }
   }
 
-  handleDelete() {
-    if (this.state.currentVal.length >= 1 && !this.state.evaluated) {
-      this.setState(prevState => ({
-        currentVal: prevState.currentVal.slice(0, -1),
-        formula: prevState.formula.slice(0, -1) }));
-
-    }
+  handleDelete(){
+   if(!this.state.evaluated){
+     this.setState(prevState => ({
+       currentVal: prevState.currentVal.length === 1 ? 0 : prevState.currentVal.slice(0, -1),
+       formula: prevState.formula.slice(0, -1)
+     }))
+   }
   }
 
   initialize() {
