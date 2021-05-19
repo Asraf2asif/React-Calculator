@@ -1,5 +1,4 @@
-function _extends() {_extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};return _extends.apply(this, arguments);}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-const maxNum = 19;
+function _extends() {_extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};return _extends.apply(this, arguments);}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}const maxNum = 19;
 class Calculator extends React.Component {
 
   constructor(props) {
@@ -15,6 +14,7 @@ class Calculator extends React.Component {
     this.handleEvaluate = this.handleEvaluate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.initialize = this.initialize.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   maxDigitWarning() {
@@ -139,13 +139,13 @@ class Calculator extends React.Component {
     }
   }
 
-  handleDelete(){
-   if(this.state.currentVal.length >= 1 && !this.state.evaluated){
-     this.setState(prevState => ({
-       currentVal: prevState.currentVal.length === 1 ? "0" : prevState.currentVal.slice(0, -1),
-       formula: prevState.formula.slice(0, -1)
-     }))
-   }
+  handleDelete() {
+    if (this.state.currentVal.length >= 1 && !this.state.evaluated) {
+      this.setState(prevState => ({
+        currentVal: prevState.currentVal.length === 1 ? "0" : prevState.currentVal.slice(0, -1),
+        formula: prevState.formula.slice(0, -1) }));
+
+    }
   }
 
   initialize() {
@@ -155,6 +155,45 @@ class Calculator extends React.Component {
       formula: "",
       evaluated: false });
 
+  }
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+  handleKeyPress(event) {
+    const keyIdMap = {
+      48: "zero", 96: "zero",
+      49: "one", 97: "one",
+      50: "two", 98: "two",
+      51: "three", 99: "three",
+      52: "four", 100: "four",
+      53: "five", 101: "five",
+      54: "six", 102: "six",
+      55: "seven", 103: "seven",
+      56: "eight", 104: "eight",
+      57: "nine", 105: "nine",
+      190: "decimal", 110: "decimal",
+      111: "divide", 191: "divide",
+      107: "add",
+      109: "subtract",
+      106: "multiply",
+      187: "equals",
+      8: "delete" };
+
+
+    const keyIdMapShift = {
+      187: "add",
+      189: "subtract",
+      56: "multiply" };
+
+
+    const key = event.keyCode;
+    const id = event.shiftKey ? keyIdMapShift[key] : keyIdMap[key];
+    if (typeof id === "string") {
+      document.getElementById(id).click();
+    }
   }
 
   render() {
@@ -208,7 +247,7 @@ class Buttons extends React.Component {constructor(...args) {super(...args);_def
     { id: "multiply", value: "x", onClick: operatorHandler, className: "operator", order: 6 },
     { id: "divide", value: "÷", onClick: operatorHandler, className: "operator", order: 2 },
 
-    { id: "module", value: "⌫", onClick: deleteOneByOne, className: "operator", order: 1 },
+    { id: "delete", value: "⌫", onClick: deleteOneByOne, className: "operator", order: 1 },
 
     { id: "equals", value: "=", onClick: evaluator, className: "operator", order: 17 },
 
