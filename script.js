@@ -177,11 +177,11 @@ class Calculator extends React.Component {
       57: "nine", 105: "nine",
       190: "decimal", 110: "decimal",
       111: "divide", 191: "divide",
-      107: "add",
-      109: "subtract",
-      106: "multiply",
-      187: "equals",
-      8: "delete" };
+      187:"equals", 13:"equals",
+      8:"delete",
+      107:"add", 
+      109:"subtract",
+      106:"multiply"  };
 
 
     const keyIdMapShift = {
